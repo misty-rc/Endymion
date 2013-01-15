@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">Endymion</string>
-    <string name="animation_duration">500</string>
-    <string name="pref_page_ejection">pref_page_ejection</string>
-    <string name="pref_initialized">initialized</string>
-    <bool name="pref_init">true</bool>
-</resources>

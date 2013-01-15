@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">"Endymion"</string>
+    <string name="app_pref">"Preference"</string>
+    <string name="pref_page_ejection">"pref_Page_Ejection"</string>
+    <string name="pref_page_ejection_val_leftToRight">"left_to_right"</string>
+    <string name="pref_page_ejection_val_rightToLeft">"right_to_left"</string>
+    <string name="pref_initialized">"initialized"</string>
+    <string name="pref_header_title">"Settings"</string>
+</resources>

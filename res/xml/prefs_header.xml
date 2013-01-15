@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+    <header
+        android:fragment="org.misty.rc.Endymion.EndymionPreferenceActivity$SettingFragment"
+        android:title="@string/pref_header_title"
+        android:summary="Test Settings"/>
+</preference-headers>

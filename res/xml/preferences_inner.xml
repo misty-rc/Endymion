@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Viewer Ejection">
+
+        <CheckBoxPreference
+            android:key="checkbox_pref"
+            android:title="Checkbox Title"
+            android:summary="Checkbox Summary"/>
+
+        <ListPreference
+            android:key="@string/pref_page_ejection"
+            android:title="@string/pref_header_title"
+            android:summary="list summary"
+            android:entries="@array/array_page_ejection"
+            android:entryValues="@array/array_page_ejection_value"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

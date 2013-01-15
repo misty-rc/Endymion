@@ -4,11 +4,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ViewFlipper;
+
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -71,26 +74,34 @@ public class EventListener implements GestureDetector.OnGestureListener {
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         float dx = Math.abs(e1.getX() - e2.getX());
         float dy = Math.abs(e1.getY() - e2.getY());
-        boolean ejection = _pref.getBoolean(_res.getString(R.string.pref_page_ejection), true);
+        String _key = _res.getString(R.string.pref_page_ejection, null);
+        String _default = _res.getString(R.string.pref_page_ejection_val_leftToRight, null);
+        String _ejection = _pref.getString(_key, _default);
 
         if(dx > dy) {
             if(velocityX > 0) {
                 // →
                 _flipper.setInAnimation(inFromLeft);
                 _flipper.setOutAnimation(outToRight);
-                if(ejection) {
+                Log.d("Endymion", "fling: left to right");
+                if(_ejection.equals(_default)) {
                     _flipper.showNext();
+                    Log.d("Endymion", "showNext");
                 } else {
                     _flipper.showPrevious();
+                    Log.d("Endymion", "showPrevious");
                 }
             } else {
                 // ←
                 _flipper.setInAnimation(inFromRight);
                 _flipper.setOutAnimation(outToLeft);
-                if(ejection) {
+                Log.d("Endymion", "fling: right to left");
+                if(_ejection.equals(_default)) {
                     _flipper.showPrevious();
+                    Log.d("Endymion", "showPrevious");
                 } else {
                     _flipper.showNext();
+                    Log.d("Endymion", "showNext");
                 }
             }
             return true;
