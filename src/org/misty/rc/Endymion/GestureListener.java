@@ -11,8 +11,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ViewFlipper;
 
-import java.util.Set;
-
 /**
  * Created with IntelliJ IDEA.
  * User: arai
@@ -20,7 +18,7 @@ import java.util.Set;
  * Time: 11:44
  * To change this template use File | Settings | File Templates.
  */
-public class EventListener implements GestureDetector.OnGestureListener {
+public class GestureListener implements GestureDetector.OnGestureListener {
 
     private Context _context;
     private ViewFlipper _flipper;
@@ -32,7 +30,9 @@ public class EventListener implements GestureDetector.OnGestureListener {
     private Animation outToLeft;
     private Animation outToRight;
 
-    public EventListener(Context context, ViewFlipper flipper) {
+    private GestureListener _listener;
+
+    public GestureListener(Context context, ViewFlipper flipper) {
         this._context = context;
         this._flipper = flipper;
         //this._pref = _context.getSharedPreferences(D.pref.NAME, Context.MODE_PRIVATE);

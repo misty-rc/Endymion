@@ -37,7 +37,7 @@ public class FolderListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.folderlist);
-        
+
         _context = getApplicationContext();
         //get preference values
         _pref = PreferenceManager.getDefaultSharedPreferences(_context);

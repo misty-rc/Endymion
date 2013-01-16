@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="general01">
+        <CheckBoxPreference
+            android:key="general01"
+            android:title="general01"
+            android:summary="general01"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="general02">
+        <CheckBoxPreference
+            android:key="general02"
+            android:title="general02"
+            android:summary="general03"/>
+
+        <Preference android:title="Media Path">
+            <intent android:action="android.intent.action.VIEW"
+                    android:targetPackage="org.misty.rc.Endymion"
+                    android:targetClass="org.misty.rc.Endymion.FolderListActivity"/>
+
+        </Preference>
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -4,8 +4,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 
 import java.util.List;
 
@@ -27,17 +25,50 @@ public class EndymionPreferenceActivity extends PreferenceActivity {
         loadHeadersFromResource(R.xml.prefs_header, target);
     }
 
-    public static class SettingFragment extends PreferenceFragment
+    public static class GeneralPrefFragment extends ExtendedPreferenceFragment
+            implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.preferences_general);
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            getPreferenceScreen().getSharedPreferences()
+                    .registerOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            getPreferenceScreen().getSharedPreferences()
+                    .unregisterOnSharedPreferenceChangeListener(this);
+        }
+    }
+
+    public static class ViewerPrefFragment extends ExtendedPreferenceFragment
             implements SharedPreferences.OnSharedPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.preferences_inner);
+            addPreferencesFromResource(R.xml.preferences_viewer);
 
-            Preference pref = findPreference(getString(R.string.pref_page_ejection));
-            String key = getString(R.string.pref_page_ejection);
-            String val = pref.getSharedPreferences().getString(key, null);
-            pref.setSummary(val);
+            // set summary
+            //String val = getPrefValue(R.string.pref_page_ejection);
+            setSummary(R.string.pref_page_ejection);
+
+            //Preference pref = findPreference(getString(R.string.pref_page_ejection));
+            //String key = getString(R.string.pref_page_ejection);
+            //String val = pref.getSharedPreferences().getString(key, null);
+            //pref.setSummary(val);
         }
 
         @Override
@@ -61,6 +92,5 @@ public class EndymionPreferenceActivity extends PreferenceActivity {
             getPreferenceScreen().getSharedPreferences()
                     .unregisterOnSharedPreferenceChangeListener(this);
         }
-
     }
 }

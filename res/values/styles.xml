@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="android:Theme.Holo.Light"/>
+
+    <style name="Animation" parent="android:Animation"/>
+    <style name="DispAnimation" parent="android:Animation.Activity">
+
+    </style>
+</resources>

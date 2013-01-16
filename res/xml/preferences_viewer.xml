@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Viewer Ejection">
+    <PreferenceCategory android:title="Viewer Layout">
+        <CheckBoxPreference
+            android:key="layout01"
+            android:title="Check layout01"
+            android:summary="Check layout01"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Viewer Setting">
 
         <CheckBoxPreference
             android:key="checkbox_pref"

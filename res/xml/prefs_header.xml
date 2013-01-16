@@ -2,7 +2,12 @@
 
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
     <header
-        android:fragment="org.misty.rc.Endymion.EndymionPreferenceActivity$SettingFragment"
+        android:fragment="org.misty.rc.Endymion.EndymionPreferenceActivity$GeneralPrefFragment"
+        android:title="general"
+        android:summary="General Settings"/>
+
+    <header
+        android:fragment="org.misty.rc.Endymion.EndymionPreferenceActivity$ViewerPrefFragment"
         android:title="@string/pref_header_title"
         android:summary="Test Settings"/>
 </preference-headers>
