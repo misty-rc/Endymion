@@ -5,6 +5,7 @@
     <string name="pref_page_ejection">"pref_Page_Ejection"</string>
     <string name="pref_page_ejection_val_leftToRight">"left_to_right"</string>
     <string name="pref_page_ejection_val_rightToLeft">"right_to_left"</string>
+    <string name="pref_folder_path">"pref_folder_path"</string>
     <string name="pref_initialized">"initialized"</string>
     <string name="pref_header_title">"Settings"</string>
 </resources>

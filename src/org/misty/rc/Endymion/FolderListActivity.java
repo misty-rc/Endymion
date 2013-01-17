@@ -3,19 +3,20 @@ package org.misty.rc.Endymion;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,7 +33,6 @@ public class FolderListActivity extends Activity {
     private Context _context;
     private SharedPreferences _pref;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,18 +43,44 @@ public class FolderListActivity extends Activity {
         _pref = PreferenceManager.getDefaultSharedPreferences(_context);
 
         //get stringset
+        String _paths_key = getString(R.string.pref_folder_path);
+        Set<String> _paths = _pref.getStringSet(_paths_key, null);
 
-
-
-        //_adapter = new ArrayAdapter<String>(this, 0, NAMES);
-        List<String> _list = new ArrayList<String>();
-        _list.add("hoghoge");
-        _list.add("foobar");
-        _list.add("/var/dev/random");
-
-        _adapter = new FolderListAdapter(this, 0, _list);
+        _adapter = new FolderListAdapter(this, 0, EndymionUtil.toStringList(_paths));
         ListView _view = (ListView) findViewById(R.id.listview01);
         _view.setAdapter(_adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.folder_list_actionbar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.folder_add:
+                // folder picker
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        //save folder paths
+
+        ListView _view = (ListView) findViewById(R.id.listview01);
+
+
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     public class FolderListAdapter extends ArrayAdapter<String> {
@@ -64,6 +90,7 @@ public class FolderListActivity extends Activity {
             super(context, textViewResourceId, objects);
             _inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
+
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {

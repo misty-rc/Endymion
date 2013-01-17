@@ -7,12 +7,15 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
+import android.view.*;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ViewFlipper;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class EndymionActivity extends Activity {
     private Context _context;
@@ -26,6 +29,8 @@ public class EndymionActivity extends Activity {
     //private static Uri _fileUri;
     //private static Drive _service;
     //private GoogleAccountCredential _credential;
+
+    private static final int PREFERENCE_ACTIVITY = 001;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,16 @@ public class EndymionActivity extends Activity {
         if(! _pref.getBoolean(_res.getString(R.string.pref_initialized), false)) {
             setDefaultPreference();
         }
+
+        SharedPreferences.Editor editor = _pref.edit();
+        String _paths_key = getString(R.string.pref_folder_path);
+        Set<String> _paths = new HashSet<String>();
+        _paths.add("/usr/local/bin/test");
+        _paths.add("/opt/local/doc");
+        _paths.add("/var/dev/random");
+        _paths.add("/etc/hogehoge");
+        editor.putStringSet(_paths_key, _paths);
+        editor.commit();
     }
 
     private void setDefaultPreference() {
@@ -82,11 +97,50 @@ public class EndymionActivity extends Activity {
             case R.id.menu_preference:
                 Intent intent = new Intent(_context, EndymionPreferenceActivity.class);
                 //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                //startActivity(intent);
+                startActivityForResult(intent, PREFERENCE_ACTIVITY);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Bundle _bundle = data.getExtras();
+        switch (requestCode) {
+            case PREFERENCE_ACTIVITY:
+                if(resultCode == RESULT_OK) {
+                    //設定反映
+                } else if (resultCode == RESULT_CANCELED) {
+
+                } else {
+
+                }
+        }
+    }
+
+    public class ImageGridAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return null;
+        }
     }
 }

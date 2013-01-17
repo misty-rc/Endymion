@@ -1,5 +1,7 @@
 package org.misty.rc.Endymion.model;
 
+import java.util.Set;
+
 /**
  * Created with IntelliJ IDEA.
  * User: arai
@@ -7,7 +9,7 @@ package org.misty.rc.Endymion.model;
  * Time: 14:32
  * To change this template use File | Settings | File Templates.
  */
-public class MediaPath {
+public class MediaPath  {
     private String _path;
 
     public void setPath(String path) {
