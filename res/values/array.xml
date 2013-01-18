@@ -14,4 +14,9 @@
         <item>@string/pref_page_ejection_val_leftToRight</item>
         <item>@string/pref_page_ejection_val_rightToLeft</item>
     </string-array>
+
+    <string-array name="test_path_array_value">
+        <item>"/var/log/tmp"</item>
+        <item>"/usr/local/bin"</item>
+    </string-array>
 </resources>
