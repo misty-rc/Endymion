@@ -19,11 +19,4 @@ public class EndymionUtil {
 
         return _list;
     }
-
-
-    public static List<?> toListFromSet(Set<?> collection) {
-        List<?> _list = new ArrayList<Object>();
-
-        return _list;
-    }
 }

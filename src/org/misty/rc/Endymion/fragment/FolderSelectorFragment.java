@@ -69,7 +69,6 @@ public class FolderSelectorFragment extends DialogFragment implements AdapterVie
         }
         _listMediaInfo.clear();
         File[] _listfiles = currentDir.listFiles(getDirectoryFileFilter());
-        //List<MediaInfo> _listMediaInfo = new ArrayList<MediaInfo>();
         if(null != _listfiles) {
             for(File path : _listfiles) {
                 _listMediaInfo.add(new MediaInfo(path.getName(), path));
@@ -79,10 +78,6 @@ public class FolderSelectorFragment extends DialogFragment implements AdapterVie
         if(null != currentDir.getParent()) {
             _listMediaInfo.add(0, new MediaInfo("..", new File(currentDir.getParent())));
         }
-    }
-
-    private void setCurrentDirectoryPath() {
-
     }
 
     private File _currentDir;
@@ -112,7 +107,7 @@ public class FolderSelectorFragment extends DialogFragment implements AdapterVie
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Bundle args = new Bundle();
-                args.putString("add_path", _currentDir.getAbsolutePath());
+                args.putString(getString(R.string.add_path), _currentDir.getAbsolutePath());
                 _listener.onDialogPositiveClick(FolderSelectorFragment.this, args );
             }
         });
@@ -142,13 +137,11 @@ public class FolderSelectorFragment extends DialogFragment implements AdapterVie
     }
 
     public class FolderSelectorAdapter extends ArrayAdapter<MediaInfo> {
-        private Context _context;
         private LayoutInflater _inflater;
         private List<MediaInfo> _list;
 
         public FolderSelectorAdapter(Context context, int textViewResourceId, List<MediaInfo> objects) {
             super(context, textViewResourceId, objects);
-            _context = context;
             _inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             _list = objects;
         }

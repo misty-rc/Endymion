@@ -8,4 +8,6 @@
     <string name="pref_folder_path">"pref_folder_path"</string>
     <string name="pref_initialized">"initialized"</string>
     <string name="pref_header_title">"Settings"</string>
+
+    <string name="add_path">"add_path"</string>
 </resources>
