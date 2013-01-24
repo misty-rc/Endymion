@@ -89,6 +89,8 @@ public class FolderSelectorFragment extends DialogFragment implements AdapterVie
         LayoutInflater _inflater = getActivity().getLayoutInflater();
         View _view = _inflater.inflate(R.layout.folderlist_choice, null, false);
 
+        Log.d("Endymion", "TAG: " + getTag());
+
         //リスト作成->設定
         //初期ディレクトリはユーザーディレクトリ直下
         _currentDir = Environment.getExternalStorageDirectory();
