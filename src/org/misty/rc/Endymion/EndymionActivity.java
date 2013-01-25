@@ -33,7 +33,7 @@ public class EndymionActivity extends Activity {
     //private static Drive _service;
     //private GoogleAccountCredential _credential;
 
-    private static final int PREFERENCE_ACTIVITY = 001;
+    private static final int PREFERENCE_ACTIVITY = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,17 +110,12 @@ public class EndymionActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("Endymion", "on activity result" + requestCode + "," + resultCode);
         super.onActivityResult(requestCode, resultCode, data);
         //Bundle _bundle = data.getExtras();
         switch (requestCode) {
             case PREFERENCE_ACTIVITY:
-                if(resultCode == RESULT_OK) {
-                    //設定反映
-                } else if (resultCode == RESULT_CANCELED) {
-
-                } else {
-
-                }
+                // 戻ってきたら再描画
         }
     }
 

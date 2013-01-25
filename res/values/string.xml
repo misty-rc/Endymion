@@ -10,4 +10,9 @@
     <string name="pref_header_title">"Settings"</string>
 
     <string name="add_path">"add_path"</string>
+
+    <!-- dialog tag -->
+    <string name="dialog_add_path">"dialog_add_path"</string>
+    <string name="dialog_delete_path">"dialog_delete_path"</string>
+
 </resources>

@@ -47,9 +47,16 @@ public class FolderSelectorFragment extends DialogFragment implements AdapterVie
         }
     }
 
+    private String _tag_current;
+    private String _tag_dialog_add_path;
+    private String _tag_dialog_delete_path;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        _tag_current = getTag();
+        _tag_dialog_add_path = getString(R.string.dialog_add_path);
+        _tag_dialog_delete_path = getString(R.string.dialog_delete_path);
     }
 
     private FileFilter getDirectoryFileFilter() {
@@ -87,39 +94,63 @@ public class FolderSelectorFragment extends DialogFragment implements AdapterVie
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater _inflater = getActivity().getLayoutInflater();
-        View _view = _inflater.inflate(R.layout.folderlist_choice, null, false);
 
-        Log.d("Endymion", "TAG: " + getTag());
+        Log.d("Endymion", "TAG: " + _tag_current);
 
-        //リスト作成->設定
-        //初期ディレクトリはユーザーディレクトリ直下
-        _currentDir = Environment.getExternalStorageDirectory();
-        createDirectoryList(_currentDir);
+        if(_tag_current.equals(_tag_dialog_add_path)) {
+            View _view = _inflater.inflate(R.layout.folderlist_choice, null, false);
 
-        _adapter = new FolderSelectorAdapter(getActivity(), 0, _listMediaInfo);
-        ListView _listView = (ListView)_view.findViewById(R.id.folderlist_choice_view);
-        _textView = (TextView)_view.findViewById(R.id.folderlist_choice_current_dir);
-        _listView.setAdapter(_adapter);
-        _listView.setOnItemClickListener(this);
-        _textView.setText(_currentDir.getAbsolutePath());
+            //初期ディレクトリはユーザーディレクトリ直下
+            _currentDir = Environment.getExternalStorageDirectory();
+            createDirectoryList(_currentDir);
 
-        //builder setting
-        builder.setTitle("フォルダを選択");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Bundle args = new Bundle();
-                args.putString(getString(R.string.add_path), _currentDir.getAbsolutePath());
-                _listener.onDialogPositiveClick(FolderSelectorFragment.this, args );
-            }
-        });
-        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                _listener.onDialogNegativeClick(FolderSelectorFragment.this);
-            }
-        });
-        builder.setView(_view);
+            _adapter = new FolderSelectorAdapter(getActivity(), 0, _listMediaInfo);
+            ListView _listView = (ListView)_view.findViewById(R.id.folderlist_choice_view);
+            _listView.setAdapter(_adapter);
+            _listView.setOnItemClickListener(this);
+            _textView = (TextView)_view.findViewById(R.id.folderlist_choice_current_dir);
+            _textView.setText(_currentDir.getAbsolutePath());
+
+            //builder setting
+            builder.setTitle("フォルダを選択");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Bundle args = new Bundle();
+                    //選択したパスをセット
+                    args.putString(getString(R.string.add_path), _currentDir.getAbsolutePath());
+                    //ダイアログタグをセット
+                    args.putString(_tag_current, _tag_dialog_add_path);
+                    _listener.onDialogPositiveClick(FolderSelectorFragment.this, args );
+                }
+            });
+            builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    _listener.onDialogNegativeClick(FolderSelectorFragment.this);
+                }
+            });
+            builder.setView(_view);
+        } else if (_tag_current.equals(_tag_dialog_delete_path)) {
+            builder.setTitle("パス削除");
+            builder.setMessage("削除してもよろしいですか？");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Bundle args = getArguments();
+                    args.putString(_tag_current, _tag_dialog_delete_path);
+                    _listener.onDialogPositiveClick(FolderSelectorFragment.this, args);
+                }
+            });
+            builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    _listener.onDialogNegativeClick(FolderSelectorFragment.this);
+                }
+            });
+        } else {
+            //nothing
+        }
         return builder.create();
     }
 
@@ -166,6 +197,6 @@ public class FolderSelectorFragment extends DialogFragment implements AdapterVie
 
     public interface FolderSelectorListener {
         public void onDialogPositiveClick(FolderSelectorFragment dialog, Bundle args);
-        public void onDialogNegativeClick(DialogFragment dialog);
+        public void onDialogNegativeClick(FolderSelectorFragment dialog);
     }
 }

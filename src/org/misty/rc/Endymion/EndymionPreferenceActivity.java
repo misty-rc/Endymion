@@ -1,9 +1,11 @@
 package org.misty.rc.Endymion;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.util.Log;
 
 import java.util.List;
 
@@ -18,6 +20,14 @@ public class EndymionPreferenceActivity extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d("Endymion", "onPause");
+        setResult(RESULT_OK);
+        super.onPause();
+        finish();
     }
 
     @Override
