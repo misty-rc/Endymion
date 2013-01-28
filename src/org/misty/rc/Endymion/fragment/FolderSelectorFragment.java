@@ -17,7 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import org.misty.rc.Endymion.R;
-import org.misty.rc.Endymion.model.MediaInfo;
+import org.misty.rc.Endymion.model.PathInfo;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -36,6 +36,14 @@ public class FolderSelectorFragment extends DialogFragment implements AdapterVie
     FolderSelectorListener _listener;
     FolderSelectorAdapter _adapter;
 
+    private List<PathInfo> _listPathInfo;
+    private File _currentDir;
+    private TextView _textView;
+
+    private String _tag_current;
+    private String _tag_dialog_add_path;
+    private String _tag_dialog_delete_path;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -46,10 +54,6 @@ public class FolderSelectorFragment extends DialogFragment implements AdapterVie
             throw new ClassCastException(activity.toString() + " must implement FolderSelectorListener");
         }
     }
-
-    private String _tag_current;
-    private String _tag_dialog_add_path;
-    private String _tag_dialog_delete_path;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,27 +72,22 @@ public class FolderSelectorFragment extends DialogFragment implements AdapterVie
         };
     }
 
-    private List<MediaInfo> _listMediaInfo;
-
     private void createDirectoryList(File currentDir) {
-        if(null == _listMediaInfo) {
-            _listMediaInfo = new ArrayList<MediaInfo>();
+        if(null == _listPathInfo) {
+            _listPathInfo = new ArrayList<PathInfo>();
         }
-        _listMediaInfo.clear();
+        _listPathInfo.clear();
         File[] _listfiles = currentDir.listFiles(getDirectoryFileFilter());
         if(null != _listfiles) {
             for(File path : _listfiles) {
-                _listMediaInfo.add(new MediaInfo(path.getName(), path));
+                _listPathInfo.add(new PathInfo(path.getName(), path));
             }
-            Collections.sort(_listMediaInfo);
+            Collections.sort(_listPathInfo);
         }
         if(null != currentDir.getParent()) {
-            _listMediaInfo.add(0, new MediaInfo("..", new File(currentDir.getParent())));
+            _listPathInfo.add(0, new PathInfo("..", new File(currentDir.getParent())));
         }
     }
-
-    private File _currentDir;
-    private TextView _textView;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -104,7 +103,7 @@ public class FolderSelectorFragment extends DialogFragment implements AdapterVie
             _currentDir = Environment.getExternalStorageDirectory();
             createDirectoryList(_currentDir);
 
-            _adapter = new FolderSelectorAdapter(getActivity(), 0, _listMediaInfo);
+            _adapter = new FolderSelectorAdapter(getActivity(), 0, _listPathInfo);
             ListView _listView = (ListView)_view.findViewById(R.id.folderlist_choice_view);
             _listView.setAdapter(_adapter);
             _listView.setOnItemClickListener(this);
@@ -157,11 +156,11 @@ public class FolderSelectorFragment extends DialogFragment implements AdapterVie
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //選択項目を取得
-        MediaInfo _mediaInfo = _adapter.getItem(position);
-        Log.d("Endymion", "touch path: " + _mediaInfo.getName() + " / " + _mediaInfo.getFile().getAbsolutePath());
+        PathInfo _pathInfo = _adapter.getItem(position);
+        Log.d("Endymion", "touch path: " + _pathInfo.getName() + " / " + _pathInfo.getFile().getAbsolutePath());
 
         //currentDirを変更
-        _currentDir = _mediaInfo.getFile();
+        _currentDir = _pathInfo.getFile();
 
         //要素を削除
         _adapter.clear();
@@ -169,24 +168,24 @@ public class FolderSelectorFragment extends DialogFragment implements AdapterVie
         createDirectoryList(_currentDir);
     }
 
-    public class FolderSelectorAdapter extends ArrayAdapter<MediaInfo> {
+    public class FolderSelectorAdapter extends ArrayAdapter<PathInfo> {
         private LayoutInflater _inflater;
-        private List<MediaInfo> _list;
+        private List<PathInfo> _list;
 
-        public FolderSelectorAdapter(Context context, int textViewResourceId, List<MediaInfo> objects) {
+        public FolderSelectorAdapter(Context context, int textViewResourceId, List<PathInfo> objects) {
             super(context, textViewResourceId, objects);
             _inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             _list = objects;
         }
 
         @Override
-        public MediaInfo getItem(int position) {
+        public PathInfo getItem(int position) {
             return _list.get(position);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            MediaInfo _file = getItem(position);
+            PathInfo _file = getItem(position);
             if(null == convertView) {
                 convertView = _inflater.inflate(android.R.layout.simple_list_item_1, null);
             }

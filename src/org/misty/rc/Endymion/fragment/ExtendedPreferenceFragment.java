@@ -1,4 +1,4 @@
-package org.misty.rc.Endymion;
+package org.misty.rc.Endymion.fragment;
 
 import android.preference.Preference;
 import android.preference.PreferenceFragment;

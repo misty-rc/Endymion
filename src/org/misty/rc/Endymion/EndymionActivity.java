@@ -1,5 +1,6 @@
 package org.misty.rc.Endymion;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -12,10 +13,9 @@ import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ViewFlipper;
+import org.misty.rc.Endymion.fragment.FolderViewFragment;
+import org.misty.rc.Endymion.fragment.SmartViewFragment;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,19 +39,37 @@ public class EndymionActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
         _context = getApplicationContext();
-        _flipper = (ViewFlipper) findViewById(R.id.viewFlipper);
         _res = getResources();
-        _pref = PreferenceManager.getDefaultSharedPreferences(_context);
 
+        _pref = PreferenceManager.getDefaultSharedPreferences(_context);
         checkInit();
 
-        _listener = new GestureListener(_context, _flipper);
-        _detector = new GestureDetector(_context, _listener);
+        // move to mediaviewer
+        //_flipper = (ViewFlipper) findViewById(R.id.viewFlipper);
+        //_listener = new GestureListener(_context, _flipper);
+        //_detector = new GestureDetector(_context, _listener);
 
         //drive test
         //_credential = GoogleAccountCredential.usingOAuth2(this, DriveScopes.DRIVE);
+
+        // tab test
+        ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Folders")
+                .setTabListener(new TopFragmentTabListener<FolderViewFragment>(
+                        this, "folder", FolderViewFragment.class
+                ))
+        );
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("Smart")
+                .setTabListener(new TopFragmentTabListener<SmartViewFragment>(
+                        this, "smart", SmartViewFragment.class
+                ))
+        );
 
         // test
         _manager = new MediaManager(_context);
@@ -83,10 +101,10 @@ public class EndymionActivity extends Activity {
         editor.commit();
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        return _detector.onTouchEvent(ev) || super.dispatchTouchEvent(ev);
-    }
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//        return _detector.onTouchEvent(ev) || super.dispatchTouchEvent(ev);
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,29 +134,6 @@ public class EndymionActivity extends Activity {
         switch (requestCode) {
             case PREFERENCE_ACTIVITY:
                 // 戻ってきたら再描画
-        }
-    }
-
-    public class ImageGridAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return 0;  //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;  //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;  //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            return null;
         }
     }
 }

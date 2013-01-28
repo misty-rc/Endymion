@@ -1,11 +1,11 @@
 package org.misty.rc.Endymion;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+import org.misty.rc.Endymion.fragment.ExtendedPreferenceFragment;
 
 import java.util.List;
 
@@ -24,10 +24,9 @@ public class EndymionPreferenceActivity extends PreferenceActivity {
 
     @Override
     protected void onPause() {
-        Log.d("Endymion", "onPause");
+        Log.d("Endymion", this.getLocalClassName() + " onPause");
         setResult(RESULT_OK);
         super.onPause();
-        finish();
     }
 
     @Override
@@ -44,7 +43,6 @@ public class EndymionPreferenceActivity extends PreferenceActivity {
             addPreferencesFromResource(R.xml.preferences_general);
         }
 
-        @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
         }
