@@ -19,6 +19,7 @@ import org.misty.rc.Endymion.fragment.SmartViewFragment;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class EndymionActivity extends Activity {
     private Context _context;
@@ -43,7 +44,7 @@ public class EndymionActivity extends Activity {
         _res = getResources();
 
         _pref = PreferenceManager.getDefaultSharedPreferences(_context);
-        checkInit();
+        checkInit(false);
 
         // move to mediaviewer
         //_flipper = (ViewFlipper) findViewById(R.id.viewFlipper);
@@ -74,16 +75,17 @@ public class EndymionActivity extends Activity {
         // test
         _manager = new MediaManager(_context);
         _manager.initTest();
-        Log.d("Endymion", "ExternalFileDir-null: " + getExternalFilesDir(null));
-        Log.d("Endymion", "ExternalFileDir-mydata: " + getExternalFilesDir("mydata"));
     }
 
-    private void checkInit() {
+    private void checkInit(boolean init) {
+        if(init) {
+            setDefaultPreference();
+        }
         if(! _pref.getBoolean(_res.getString(R.string.pref_initialized), false)) {
             setDefaultPreference();
         }
 
-        SharedPreferences.Editor editor = _pref.edit();
+/*        SharedPreferences.Editor editor = _pref.edit();
         String _paths_key = getString(R.string.pref_folder_path);
         Set<String> _paths = new HashSet<String>();
         _paths.add("/usr/local/bin/test");
@@ -91,13 +93,14 @@ public class EndymionActivity extends Activity {
         _paths.add("/var/dev/random");
         _paths.add("/etc/hogehoge");
         editor.putStringSet(_paths_key, _paths);
-        editor.commit();
+        editor.commit();*/
     }
 
     private void setDefaultPreference() {
         SharedPreferences.Editor editor = _pref.edit();
         editor.putBoolean(_res.getString(R.string.pref_page_ejection), true);
         editor.putBoolean(_res.getString(R.string.pref_initialized), true);
+        editor.putStringSet(getString(R.string.pref_folder_path), new TreeSet<String>());
         editor.commit();
     }
 

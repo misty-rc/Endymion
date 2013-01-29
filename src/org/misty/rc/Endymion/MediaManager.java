@@ -25,14 +25,6 @@ public class MediaManager {
     }
 
     public void initTest() {
-        File externalStorageDir = Environment.getExternalStorageDirectory();
-        File dataDir = Environment.getDataDirectory();
-        File rootDir = Environment.getRootDirectory();
-
-        Log.d("Endymion", "ExternalStorageDir: " + externalStorageDir.getAbsolutePath());
-        Log.d("Endymion", "dataDir: " + dataDir.getAbsolutePath());
-        Log.d("Endymion", "rootDir: " + rootDir.getAbsolutePath());
-
         _pref = PreferenceManager.getDefaultSharedPreferences(_context);
     }
 
@@ -40,5 +32,7 @@ public class MediaManager {
         SharedPreferences.Editor editor = _pref.edit();
         
     }
+
+
 
 }
