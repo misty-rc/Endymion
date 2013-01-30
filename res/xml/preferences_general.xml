@@ -20,8 +20,5 @@
                     android:targetClass="org.misty.rc.Endymion.FolderListActivity"/>
 
         </Preference>
-
-
     </PreferenceCategory>
-
 </PreferenceScreen>

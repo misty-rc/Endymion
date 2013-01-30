@@ -41,7 +41,7 @@ public class EndymionActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         _context = getApplicationContext();
-        _res = getResources();
+        //_res = getResources();
 
         _pref = PreferenceManager.getDefaultSharedPreferences(_context);
         checkInit(false);
@@ -71,35 +71,22 @@ public class EndymionActivity extends Activity {
                         this, "smart", SmartViewFragment.class
                 ))
         );
-
-        // test
-        _manager = new MediaManager(_context);
-        _manager.initTest();
     }
 
     private void checkInit(boolean init) {
         if(init) {
             setDefaultPreference();
         }
-        if(! _pref.getBoolean(_res.getString(R.string.pref_initialized), false)) {
+        if(! _pref.getBoolean(getString(R.string.pref_initialized), false)) {
             setDefaultPreference();
         }
-
-/*        SharedPreferences.Editor editor = _pref.edit();
-        String _paths_key = getString(R.string.pref_folder_path);
-        Set<String> _paths = new HashSet<String>();
-        _paths.add("/usr/local/bin/test");
-        _paths.add("/opt/local/doc");
-        _paths.add("/var/dev/random");
-        _paths.add("/etc/hogehoge");
-        editor.putStringSet(_paths_key, _paths);
-        editor.commit();*/
     }
 
     private void setDefaultPreference() {
         SharedPreferences.Editor editor = _pref.edit();
-        editor.putBoolean(_res.getString(R.string.pref_page_ejection), true);
-        editor.putBoolean(_res.getString(R.string.pref_initialized), true);
+        editor.clear();
+        editor.putString(getString(R.string.pref_page_ejection), getString(R.string.pref_page_ejection_val_leftToRight));
+        editor.putBoolean(getString(R.string.pref_initialized), true);
         editor.putStringSet(getString(R.string.pref_folder_path), new TreeSet<String>());
         editor.commit();
     }

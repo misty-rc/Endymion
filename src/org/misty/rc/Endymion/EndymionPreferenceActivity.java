@@ -70,13 +70,7 @@ public class EndymionPreferenceActivity extends PreferenceActivity {
             addPreferencesFromResource(R.xml.preferences_viewer);
 
             // set summary
-            //String val = getPrefValue(R.string.pref_page_ejection);
             setSummary(R.string.pref_page_ejection);
-
-            //Preference pref = findPreference(getString(R.string.pref_page_ejection));
-            //String key = getString(R.string.pref_page_ejection);
-            //String val = pref.getSharedPreferences().getString(key, null);
-            //pref.setSummary(val);
         }
 
         @Override

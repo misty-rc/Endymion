@@ -1,10 +1,15 @@
 package org.misty.rc.Endymion.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -29,33 +34,129 @@ public class FolderViewFragment extends Fragment {
     private final String LOG_TAG = "FolderViewFragment";
     private List<FolderInfo> _FolderInfoList;
 
-    public static final String[] TestArray = {"hoge","foo","bar","test01","test02","test03","test04"};
+    private FolderViewAdapter _adapter;
 
+
+    @Override
+    public void onAttach(Activity activity) {
+        Log.d(TAG, LOG_TAG + " onAttach");
+        super.onAttach(activity);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onPause() {
+        Log.d(TAG, LOG_TAG + " onPause");
+        super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onResume() {
+        Log.d(TAG, LOG_TAG + " onResume");
+        _FolderInfoList = getFolderInfoList(getPathSet());
+        _adapter.clear();
+        _adapter.addAll(_FolderInfoList);
+        _adapter.notifyDataSetChanged();
+        _gridView.invalidateViews();
+        super.onResume();    //To change body of overridden methods use File | Settings | File Templates.
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, LOG_TAG + " onCreate");
         super.onCreate(savedInstanceState);
+        _FolderInfoList = getFolderInfoList(getPathSet());
 
-        //pref
+        thumbTest(_FolderInfoList.get(0).getAbsPath());
+    }
+
+    private void thumbTest(String path) {
+        String _path = path;
+
+        ContentResolver cr = getActivity().getContentResolver();
+        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Uri.Builder builder = new Uri.Builder();
+        builder.path(_path);
+        Uri uri2 = builder.build();
+        Cursor c = cr.query(
+                uri,
+                new String[] {
+                        MediaStore.Images.Media._ID,
+                        MediaStore.Images.Media.DATA,
+                        MediaStore.Images.Media.DISPLAY_NAME,
+                        MediaStore.Images.Media.MIME_TYPE,
+                        MediaStore.Images.Media.TITLE
+                },
+                null,
+                null,
+                null
+        );
+
+        Log.d(TAG, LOG_TAG + " Cursor Count: " + c.getCount());
+
+        c.moveToFirst();
+        for (int k = 0; k < c.getCount(); k++ ) {
+            Log.d(TAG, "ID= " + c.getString(c.getColumnIndexOrThrow("_id")));
+            for(String column : c.getColumnNames()) {
+                Log.d(TAG, column + " = " + c.getString(c.getColumnIndexOrThrow(column)));
+            }
+            c.moveToNext();
+        }
+    }
+
+    private Set<String> getPathSet() {
         SharedPreferences _pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Set<String> _paths = _pref.getStringSet(getString(R.string.pref_folder_path), null);
-
-        _FolderInfoList = getFolderInfoList(_paths);
-
-        //FolderViewAdapter _adapter = new FolderViewAdapter(getActivity(), 0, _FolderInfoList);
+        return _pref.getStringSet(getString(R.string.pref_folder_path), new TreeSet<String>());
     }
 
     private List<FolderInfo> getFolderInfoList(Set<String> paths) {
         List<FolderInfo> _list = new ArrayList<FolderInfo>();
-        Iterator<String> it = paths.iterator();
-        while(it.hasNext()) {
-            FolderInfo inf = new FolderInfo(new File(it.next()), FolderInfo.FLAG_STATIC_FOLDER);
+        for (String path : paths) {
+            FolderInfo inf = new FolderInfo(new File(path), FolderInfo.FLAG_STATIC_FOLDER);
             Log.d(TAG, LOG_TAG + " getFolderInfoList, " + inf.getName());
             _list.add(inf);
         }
         return _list;
     }
+
+    private TextView _textView;
+    private GridView _gridView;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, LOG_TAG + " onCreateView");
+        _gridView = new GridView(getActivity());
+        //_gridView.setTag(R.string.id_folder_view_gridview);
+        _textView = new TextView(getActivity());
+        int MATCH_PARENT = ViewGroup.LayoutParams.MATCH_PARENT;
+        int WRAP_CONTENT = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+        // inflate view
+        View v = inflater.inflate(R.layout.folder_view_frag, container, false);
+        if(_FolderInfoList.isEmpty()) {
+            // パスが無い（からっぽ）の場合
+            _textView.setText("フォルダが設定されていません");
+            _textView.setGravity(Gravity.CENTER);
+            ((LinearLayout) v).addView(_textView, new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+        } else {
+            // パスが設定されている場合
+            _gridView.setNumColumns(4);
+            _gridView.setColumnWidth(40);
+            _gridView.setVerticalSpacing(10);
+            _gridView.setHorizontalSpacing(10);
+            _gridView.setGravity(Gravity.CENTER);
+            ((LinearLayout) v).addView(_gridView, new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+        }
+        return v;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        _adapter = new FolderViewAdapter(getActivity(), 0, _FolderInfoList);
+        _gridView.setAdapter(_adapter);
+    }
+
 
     public class FolderViewAdapter extends ArrayAdapter<FolderInfo> {
         private Context _context;
@@ -67,11 +168,6 @@ public class FolderViewFragment extends Fragment {
             _context = context;
             _inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             _list = objects;
-        }
-
-        @Override
-        public int getCount() {
-            return _list.size();
         }
 
         @Override
@@ -92,50 +188,5 @@ public class FolderViewFragment extends Fragment {
 
             return convertView;
         }
-    }
-
-    private FolderViewAdapter _adapter;
-
-    private final int WRAP_CONTENT = ViewGroup.LayoutParams.WRAP_CONTENT;
-    private final int MATCH_PARENT = ViewGroup.LayoutParams.MATCH_PARENT;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(TAG, LOG_TAG + " onCreateView");
-
-        // inflate view
-        View v = inflater.inflate(R.layout.folder_view_frag, container, false);
-
-        if(_FolderInfoList.isEmpty()) {
-            // パスが無い（からっぽ）の場合
-            //_adapter.clear();
-            TextView _tv = new TextView(getActivity());
-            _tv.setText("フォルダが設定されていません");
-            _tv.setGravity(Gravity.CENTER);
-            ((LinearLayout) v).addView(_tv, new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
-        } else {
-            // パスが設定されている場合
-            _adapter = new FolderViewAdapter(getActivity(), 0, _FolderInfoList);
-            GridView _gv = new GridView(getActivity());
-            _gv.setNumColumns(4);
-            _gv.setColumnWidth(40);
-            _gv.setVerticalSpacing(10);
-            _gv.setHorizontalSpacing(10);
-            _gv.setGravity(Gravity.CENTER);
-            _gv.setAdapter(_adapter);
-            ((LinearLayout) v).addView(_gv, new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-        }
-        //
-        //GridView _grid = (GridView)v.findViewById(R.id.folder_grid);
-        //_grid.setAdapter(new TestAdapter(this.getActivity()));
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(v.getContext(), R.layout.folder_view_frag_item, TestArray);
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(v.getContext(), android.R.layout.simple_list_item_1, TestArray);
-        //TestAdapter adapter = new TestAdapter(getActivity());
-        return v;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 }

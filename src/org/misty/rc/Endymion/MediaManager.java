@@ -25,11 +25,11 @@ public class MediaManager {
     }
 
     public void initTest() {
-        _pref = PreferenceManager.getDefaultSharedPreferences(_context);
+        //_pref = PreferenceManager.getDefaultSharedPreferences(_context);
     }
 
     private void getDataPath() {
-        SharedPreferences.Editor editor = _pref.edit();
+        //SharedPreferences.Editor editor = _pref.edit();
         
     }
 
