@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.UserDictionary;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -72,10 +73,12 @@ public class FolderViewFragment extends Fragment {
 
     private void thumbTest(String path) {
         String _path = path;
+        Uri uri3 = Uri.fromFile(new File(_path));
 
         ContentResolver cr = getActivity().getContentResolver();
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         Uri.Builder builder = new Uri.Builder();
+
         builder.path(_path);
         Uri uri2 = builder.build();
         Cursor c = cr.query(
