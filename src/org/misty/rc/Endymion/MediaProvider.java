@@ -1,9 +1,6 @@
 package org.misty.rc.Endymion;
 
-import android.content.ContentProvider;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.UriMatcher;
+import android.content.*;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -90,9 +87,24 @@ public final class MediaProvider extends ContentProvider {
         return true;
     }
 
+    private void checkUri(Uri uri) {
+        final int code = _UriMatcher.match(uri);
+        for (final Contract contract : Contract.values()) {
+            if(code == contract.allCode) {
+                return;
+            } else if (code == contract.byIdCode) {
+                return;
+            }
+        }
+        throw new IllegalArgumentException("unknown uri: " + uri);
+    }
+
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        checkUri(uri);
+        SQLiteDatabase db = _OpenHelper.getReadableDatabase();
+
+        return null;
     }
 
     @Override
